@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState, useContext} from "react";
+import axios from "axios";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
@@ -7,8 +8,33 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
 import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
 import ClearIcon from "@material-ui/icons/Clear";
 import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import Context from "../../context"
+const URL = "https://api.cloudinary.com/v1_1/lsktrgebrt/image/upload"
 
 const CreatePin = ({ classes }) => {
+  const [title, setTitle] = useState("")
+  const [image, setImage] = useState("")
+  const [content, setContent] = useState("")
+  const {dispatch} = useContext(Context)
+  const handleDeleteDraft = () =>{
+    setTitle("")
+    setImage("")
+    setContent("")
+    dispatch({type: "DELETE_DRAFT"})
+  }
+  const handleImageUpload = async() => {
+    const data = new FormData()
+    data.append("file", image)
+    data.append("upload_preset", "geopins")
+    data.append("cloud_name", "lsktrgebrt")
+    const res = await axios.post(URL, data)
+    return res.data.url
+  }
+  const handleSubmit = async event =>{
+      event.preventDefault()
+      const url = await handleImageUpload()
+      console.log({title, image, url, content })
+  }
   return (
     <form className={classes.form}>
       <Typography
@@ -27,15 +53,18 @@ const CreatePin = ({ classes }) => {
           name="title"
           label="Title"
           placeholder="Insert pin title"
+          onChange={e=>setTitle(e.target.value)}
         />
         <input
           className={classes.input}
           accept="image/*"
           id="image"
           type="file"
+          onChange={e=>setImage(e.target.files[0])}
         />
         <label htmlFor="image">
           <Button
+            style = {{color:image && "green"}}
             className={classes.button}
             component="span"
             size="small"
@@ -53,6 +82,7 @@ const CreatePin = ({ classes }) => {
           fullWidth
           rows="6"
           margin="normal"
+          onChange={e=>setContent(e.target.value)}
         />
       </div>
       <div>
@@ -60,6 +90,7 @@ const CreatePin = ({ classes }) => {
           className={classes.button}
           variant="contained"
           color="primary"
+          onClick={handleDeleteDraft}
         >
           <ClearIcon className={classes.leftIcon} />
           Discard
@@ -69,6 +100,8 @@ const CreatePin = ({ classes }) => {
           className={classes.button}
           variant="contained"
           color="secondary"
+          disabled={!title.trim() || !content.trim() || !image}
+          onClick={handleSubmit}
         >
           Submit
           <SaveIcon className={classes.rightIcon} />
