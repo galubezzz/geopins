@@ -1,15 +1,81 @@
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-// import TextField from "@material-ui/core/TextField";
-// import Typography from "@material-ui/core/Typography";
-// import Button from "@material-ui/core/Button";
-// import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
-// import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
-// import ClearIcon from "@material-ui/icons/Clear";
-// import SaveIcon from "@material-ui/icons/SaveTwoTone";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import AddAPhotoIcon from "@material-ui/icons/AddAPhotoTwoTone";
+import LandscapeIcon from "@material-ui/icons/LandscapeOutlined";
+import ClearIcon from "@material-ui/icons/Clear";
+import SaveIcon from "@material-ui/icons/SaveTwoTone";
 
 const CreatePin = ({ classes }) => {
-  return <div>CreatePin</div>;
+  return (
+    <form className={classes.form}>
+      <Typography
+        className={classes.alignCenter}
+        component="h2"
+        variant="h4"
+        color="secondary"
+      >
+        <LandscapeIcon
+          className={classes.iconLarge}
+        />
+    Pin location
+  </Typography>
+      <div>
+        <TextField
+          name="title"
+          label="Title"
+          placeholder="Insert pin title"
+        />
+        <input
+          className={classes.input}
+          accept="image/*"
+          id="image"
+          type="file"
+        />
+        <label htmlFor="image">
+          <Button
+            className={classes.button}
+            component="span"
+            size="small"
+          >
+            <AddAPhotoIcon />
+          </Button>
+        </label>
+      </div>
+      <div className={classes.contentField}>
+        <TextField
+          variant="outlined"
+          name="content"
+          label="Content"
+          multiline
+          fullWidth
+          rows="6"
+          margin="normal"
+        />
+      </div>
+      <div>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+        >
+          <ClearIcon className={classes.leftIcon} />
+          Discard
+        </Button>
+        <Button
+        type="submit"
+          className={classes.button}
+          variant="contained"
+          color="secondary"
+        >
+          Submit
+          <SaveIcon className={classes.rightIcon} />
+        </Button>
+      </div>
+    </form>
+  )
 };
 
 const styles = theme => ({
