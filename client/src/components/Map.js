@@ -6,6 +6,7 @@ import Context from "../context"
 import Blog from "../components/Blog"
 import {useClient} from "../client"
 import {GET_PINS_QUERY} from "../graphql/queries"
+import {DELETE_PIN_MUTATION} from "../graphql/mutations"
 import differenceInMinutes from "date-fns/difference_in_minutes"
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
@@ -66,6 +67,13 @@ const Map = ({ classes }) => {
     dispatch({type: "SET_PIN", payload: pin})
   }
   const isAuthUser = () => state.currentUser._id === popup.author._id
+
+  const handleDeletePin = async (pin) => {
+    const variables = {pinId: pin._id}
+    const {deletePin} = await client.request(DELETE_PIN_MUTATION, variables)
+    dispatch({type: "DELETE_PIN", payload: deletePin})
+    setPopup(null)
+  }
   return (
     <div className={classes.root}>
       <ReactMapGL
@@ -134,7 +142,7 @@ const Map = ({ classes }) => {
                 {popup.latitude.toFixed(6)}, {popup.longitude.toFixed(6)}
               </Typography>
               {isAuthUser() && (
-                <Button>
+                <Button onClick={()=>handleDeletePin(popup)}>
                   <DeleteIcon className={classes.DeleteIcon}/>
                 </Button>
               )}
