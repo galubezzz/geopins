@@ -30,3 +30,28 @@ mutation($pinId: ID!){
     }
 }
 `
+export const CREATE_COMMENT_MUTATION = `
+mutation($pinId: ID!, $text: String!){
+    createComment(pinId: $pinId, text: $text){
+        _id
+        createdAt
+        title
+        content
+        image
+        latituge
+        longitude
+        author{
+            _id
+            name
+        }
+        comments{
+            text
+            createsAt
+            author{
+                name
+                picture
+            }
+        }
+    }
+}
+`
