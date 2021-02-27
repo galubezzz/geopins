@@ -38,7 +38,7 @@ mutation($pinId: ID!, $text: String!){
         title
         content
         image
-        latituge
+        latitude
         longitude
         author{
             _id
@@ -46,7 +46,7 @@ mutation($pinId: ID!, $text: String!){
         }
         comments{
             text
-            createsAt
+            createdAt
             author{
                 name
                 picture
