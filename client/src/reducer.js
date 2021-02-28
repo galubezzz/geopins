@@ -1,17 +1,17 @@
-export default function reducer(state, {type, payload}){
-    switch(type){
+export default function reducer(state, { type, payload }) {
+    switch (type) {
         case "LOGIN_USER":
             return {
-                ...state, 
+                ...state,
                 currentUser: payload
             }
         case "IS_LOGGED_IN":
-        return {
-            ...state,
-            isAuth: payload
-        }
+            return {
+                ...state,
+                isAuth: payload
+            }
         case "SIGNOUT_USER":
-            return{
+            return {
                 ...state,
                 isAuth: false,
                 currentUser: null
@@ -31,7 +31,7 @@ export default function reducer(state, {type, payload}){
                 draft: payload
             }
         case "DELETE_DRAFT":
-            return{
+            return {
                 ...state,
                 draft: null
             }
@@ -56,14 +56,23 @@ export default function reducer(state, {type, payload}){
         case "DELETE_PIN":
             const deletedPin = payload
             const filteredPins = state.pins.filter(pin => pin._id !== deletedPin._id)
+            if (state.currentPin) {
+                const isCurrentPin = deletedPin._id === state.currentPin._id
+                if (isCurrentPin) {
+                    return {
+                        ...state,
+                        pins: filteredPins,
+                        currentPin: null
+                    }
+                }
+            }
             return {
                 ...state,
-                pins: filteredPins,
-                currentPin: null
+                pins: filteredPins
             }
         case "CREATE_COMMENT":
             const updatedCurrentPin = payload
-            const updatedPins = state.pins.map(pin=>
+            const updatedPins = state.pins.map(pin =>
                 pin._id === updatedCurrentPin ? updatedCurrentPin : pin
             )
             return {
