@@ -11,7 +11,8 @@ import differenceInMinutes from "date-fns/difference_in_minutes"
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/DeleteTwoTone";
-import {Subscription} from "react-apollo"
+import {Subscription} from "react-apollo";
+import {unstable_useMediaQuery as useMediaQuery} from "@material-ui/core/useMediaQuery";
 import {PIN_ADDED_SUBSCRIPTION, PIN_DELETED_SUBSCRIPTION, PIN_UPDATED_SUBSCRIPTION} from "../graphql/subscriptions"
 const MAP_TOKEN = "pk.eyJ1IjoiZ2FsdWJlenp6IiwiYSI6ImNrbGRiYTUwZzBzOHYydm1sbml1aDh0bXcifQ.Ee4INWmMI8XuUl6K9P0mJg"
 const INITIAL_VIEWPORT = {
@@ -21,6 +22,7 @@ const INITIAL_VIEWPORT = {
 }
 const Map = ({ classes }) => {
   const client = useClient()
+  const mobileSize = useMediaQuery("(max-width: 650px)")
   const { state, dispatch } = useContext(Context)
 
   useEffect(()=>{
@@ -78,7 +80,7 @@ const Map = ({ classes }) => {
     setPopup(null)
   }
   return (
-    <div className={classes.root}>
+    <div className={mobileSize ?  classes.rootMobile : classes.root}>
       <ReactMapGL
         width="100vw"
         height="calc(100vh - 64px)"
@@ -87,6 +89,7 @@ const Map = ({ classes }) => {
         onViewportChange={newViewport => setViewport(newViewport)}
         onClick={handleMapClick}
         {...viewport}
+        scrollZoom = {!mobileSize}
       >
         <div className={classes.navigationControl}>
           <NavigationControl
