@@ -20,10 +20,24 @@ const verifyAuthToken = async token => {
     }
 }
 
-const checkIfUserExists = async email => await User.findOne({email}).exec()
+const checkIfUserExists = async email => {
+    try {
+        const user = await User.findOne({email}).exec()
+        return user
+    }
+    catch (err){
+        console.error("Error finding user", err)
+    }
+    
+}
 
 const createNewUser = googleUser => {
-    const {name, email, picture} = googleUser
-    const user = {name, email, picture}
-    return new User(user).save()
+    try {
+        const {name, email, picture} = googleUser
+        const user = {name, email, picture}
+        return new User(user).save()
+    } catch (e) {
+        console.error("Error createNewUser", e)
+    }
+
 }
