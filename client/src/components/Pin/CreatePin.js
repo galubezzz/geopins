@@ -11,9 +11,11 @@ import SaveIcon from "@material-ui/icons/SaveTwoTone";
 import Context from "../../context"
 import { CREATE_PIN_MUTATION } from "../../graphql/mutations"
 import {useClient} from "../../client"
+import {unstable_useMediaQuery as useMediaQuery} from "@material-ui/core/useMediaQuery";
 const URL = "https://api.cloudinary.com/v1_1/lsktrgebrt/image/upload"
 
 const CreatePin = ({ classes }) => {
+  const mobileSize = useMediaQuery("(max-width: 650px)")
   const client = useClient()
   const [title, setTitle] = useState("")
   const [image, setImage] = useState("")
@@ -102,7 +104,7 @@ const CreatePin = ({ classes }) => {
           label="Content"
           multiline
           fullWidth
-          rows="6"
+          rows={mobileSize ? "3" : "6"}
           margin="normal"
           onChange={e => setContent(e.target.value)}
         />
